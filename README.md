@@ -1,27 +1,26 @@
 # interception-k2k
-All-in-one input key mapper for [Interception Tools](https://gitlab.com/interception/linux/tools).
+Fork of [interception-k2k](https://github.com/zsugabubus/interception-k2k) with common configuration to remap `caps-lock` to `ctrl` when held and `escape` when tapped.
 
 ## Configuration
 
-User configuration files can be placed under subdirectories of `config`
-directory. Executables will be generated per subdirectory, so you can easily
-manage your rules if you need more instances of `interception-k2k`. See
-`example` directory for examples.
+This config can be found in `example/interception-pipe0/tap-rules.h.in`:
+```
+{ .base_key = KEY_CAPSLOCK, .tap_key = KEY_ESC, .repeat_key = KEY_LEFTCTRL, .hold_key = KEY_LEFTCTRL },
+```
 
-If you wish to try out example configuration, modify `/etc/udevmon.yaml` to
-look something like this:
+Modify `/etc/udevmon.yaml` to contain:
 ```yaml
-- JOB: "intercept -g $DEVNODE | /opt/interception/interception-pipe0 | /opt/interception/interception-pipe1 | uinput -d $DEVNODE"
+- JOB: "intercept -g $DEVNODE | /opt/interception/interception-pipe0 | uinput -d $DEVNODE"
   DEVICE:
     EVENTS:
-      EV_KEY: [KEY_CAPSLOCK, KEY_ESC, KEY_SPACE]
+      EV_KEY: [KEY_CAPSLOCK]
 ```
 
 ## Installation
 
 ```sh
-git clone https://github.com/zsugabubus/interception-k2k
+git clone https://github.com/milesfrain/interception-k2k
 cd interception-k2k
-make # or make CONFIG_DIR=example
-make install
+make CONFIG_DIR=example
+make CONFIG_DIR=example install
 ```
