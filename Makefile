@@ -1,23 +1,19 @@
 CFLAGS+=-std=c99 -O3 -Wall -Wextra -Werror -Wno-type-limits
-TIMEOUT?=10
+TIMEOUT?=30
 
-CONFIG_DIR:=config
 OUT_DIR:=out
 INSTALL_DIR:=/opt/interception
 
-TARGETS:=$(addprefix $(OUT_DIR)/,$(notdir $(wildcard $(CONFIG_DIR)/*)))
+TARGET:=$(OUT_DIR)/simple_caps2esc
 
 .PHONY: all
-all: $(TARGETS)
+all: $(TARGET)
 
-$(OUT_DIR)/%: k2k.c $(CONFIG_DIR)/%/map-rules.h.in $(CONFIG_DIR)/%/tap-rules.h.in $(CONFIG_DIR)/%/multi-rules.h.in | $(OUT_DIR)
-	$(CC) $(CFLAGS) -I$(CONFIG_DIR)/$* $< -o $@
+$(TARGET): k2k.c | $(OUT_DIR)
+	$(CC) $(CFLAGS) $< -o $@
 
 $(OUT_DIR):
 	mkdir $@
-
-%-rules.h.in:
-	touch $@
 
 .PHONY: clean
 clean:
@@ -26,7 +22,7 @@ clean:
 .PHONY: install
 install:
 	# If you have run `make test` then do not forget to run `make clean` after. Otherwise you may install with debug logs on.
-	install -D --strip -t /opt/interception $(TARGETS)
+	install -D --strip -t /opt/interception $(TARGET)
 
 .PHONY: test
 test:

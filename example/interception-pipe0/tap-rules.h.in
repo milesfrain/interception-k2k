@@ -1,1 +1,0 @@
-{ .base_key = KEY_CAPSLOCK, .tap_key = KEY_ESC, .repeat_key = KEY_LEFTCTRL, .hold_key = KEY_LEFTCTRL },
